@@ -313,6 +313,18 @@ namespace OpenMined.Syft.Tensor
                     Cpu();
                     return msgObj.functionCall + ": OK";
                 }
+				case "cumsum":
+				{	
+					int dim = int.Parse(msgObj.tensorIndexParams[0]);
+					var result = this.CumSum(dim);
+					return result.Id.ToString();
+				}
+				case "cumsum_":
+				{
+					int dim = int.Parse(msgObj.tensorIndexParams[0]);
+					this.CumSum(dim, inline: true);
+					return this.Id.ToString();
+				}		
                 case "div_elem":
                 {
                     var tensor_1 = ctrl.getTensor(int.Parse(msgObj.tensorIndexParams[0]));

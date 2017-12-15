@@ -248,6 +248,28 @@ namespace OpenMined.Syft.Tensor
             return result;
         }
 
+		public FloatTensor CumSum(int dim, bool inline = false)
+		{	
+			if (!(dim >= 0 & dim < 2))
+			{
+				throw new InvalidOperationException(String.Format("dimension {0} out of range.", dim));
+			}	
+			
+			if (dataOnGpu) 
+			{
+				if (!inline) return CumSumGPU ();
+				CumSumGPU_();
+				return this;
+			}
+			var result = inline ? this : this.Copy();
+			float cumsum = 0;
+			for (var i = 0; i < this.Shape[dim]; i++)
+			{
+				cumsum += this.Data[i * this.Strides[dim]];
+				result.Data[i * this.Strides[dim]] = cumsum;
+			}
+			return result;
+		}
         public FloatTensor Div(FloatTensor x, bool inline = false)
         {
             // Check if both tensors are compatible for sum

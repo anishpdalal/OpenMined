@@ -563,7 +563,7 @@ namespace OpenMined.Tests.Editor.FloatTensor
                 Assert.AreEqual(expectedCoshTensor[i], tensor1[i]);
             }
         }
-
+	
         [Test]
         public void Create1DTensor()
         {
