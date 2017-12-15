@@ -612,41 +612,7 @@ namespace OpenMined.Tests
 
             AssertApproximatelyEqualTensorsData(expectedCoshTensor, tensor1);
         }
-
-		[Test]
-		public void CumSum()
-		{
-			float[] data = {1f, 2f, 3f, 4f, 5f};
-			int[] shape1 = {5, 1};
-			int dim = 0;
-			var tensor = new Syft.Tensor.FloatTensor(_controller: ctrl, _data: data, _shape: shape1);
-			tensor.Gpu(shader);
-			var actualTensor = tensor.CumSum(dim);
-
-			float[] expectedData = {1f, 3f, 6f, 10f, 15f};
-			var expectedTensor = new Syft.Tensor.FloatTensor(_controller: ctrl, _data: expectedData, _shape: shape1);
-			expectedTensor.Gpu(shader);
-
-			AssertEqualTensorsData(actualTensor, expectedTensor);
-		}
-
-		[Test]
-		public void CumSum_()
-		{
-			float[] data = {1f, 2f, 3f, 4f, 5f};
-			int[] shape1 = {5, 1};
-			int dim = 0;
-			var tensor = new Syft.Tensor.FloatTensor(_controller: ctrl, _data: data, _shape: shape1);
-			tensor.Gpu(shader);
-			tensor.CumSum(dim);
-
-			float[] expectedData = {1f, 3f, 6f, 10f, 15f};
-			var expectedTensor = new Syft.Tensor.FloatTensor(_controller: ctrl, _data: expectedData, _shape: shape1);
-			expectedTensor.Gpu(shader);
-
-			AssertEqualTensorsData(tensor, expectedTensor);
-		}
-
+			
         // 'Create1DTensor', 'Create2DTensor' and 'Create3DTensor' non required for GPU
 
         [Test]

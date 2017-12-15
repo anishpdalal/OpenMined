@@ -25,8 +25,6 @@ namespace OpenMined.Syft.Tensor
         [SerializeField] private static int CosKernel_;
         [SerializeField] private static int CoshKernel;
         [SerializeField] private static int CoshKernel_;
-		[SerializeField] private static int CumSumKernel;
-		[SerializeField] private static int CumSumKernel_;
         [SerializeField] private static int DivScalarKernel_;
         [SerializeField] private static int DivElemKernel_;
         [SerializeField] private static int DivScalarKernel;
@@ -103,8 +101,6 @@ namespace OpenMined.Syft.Tensor
             CosKernel_ = shader.FindKernel("Cos_");
             CoshKernel = shader.FindKernel("Cosh");
             CoshKernel_ = shader.FindKernel("Cosh_");
-			CumSumKernel = shader.FindKernel("CumSum");
-			CumSumKernel_ = shader.FindKernel("CumSum_");
             DivScalarKernel_ = shader.FindKernel("DivScalar_");
             DivElemKernel_ = shader.FindKernel("DivElem_");
             DivScalarKernel = shader.FindKernel("DivScalar");
@@ -335,30 +331,7 @@ namespace OpenMined.Syft.Tensor
             shader.SetBuffer(CoshKernel_, "CoshData_", dataBuffer);
             shader.Dispatch(CoshKernel_, this.size, 1, 1);
         }
-
-		public FloatTensor CumSumGPU(int dim)
-		{
-			var result = this.Copy();
-			shader.SetBuffer(CumSumKernel, "CumSumData", dataBuffer);
-			shader.SetBuffer(CumSumKernel, "CumSumResult", result.DataBuffer);
-			var cumSum = SendFloatToGpu(CumSumKernel, 0, "cumSum");
-			var dimStride = SendIntToGpu(CumSumKernel, this.Strides[dim], "dimStride");
-			shader.Dispatch(CumSumKernel, this.Shape[dim], 1, 1);
-			cumSum.Release();
-			dimStride.Release();
-			return result;
-		}
-
-		public void CumSumGPU_(int dim)
-		{
-			shader.SetBuffer(CumSumKernel_, "CumSumData_", dataBuffer);
-			var cumSum = SendFloatToGpu(CumSumKernel_, this.Shape[dim], "cumSum");
-			var dimStride = SendIntToGpu(CumSumKernel_, this.Strides[dim], "dimStride");
-			shader.Dispatch(CumSumKernel_, this.Shape[dim], 1, 1);
-			cumSum.Release();
-			dimStride.Release();
-		}
-
+			
         public void DivScalarGPU_(float value)
         {
             Debug.LogFormat("<color=blue>FloatTensor.DivScalarGPU_ dataOnGpu: {0}</color>", dataOnGpu);
