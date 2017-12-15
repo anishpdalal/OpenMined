@@ -227,6 +227,35 @@ void Cosh_ (uint3 id: SV_DispatchThreadID) {
     CoshData_[id.x] = cosh(CoshData_[id.x]);
 }
 
+#pragma kernel CumSum
+RWStructuredBuffer<float> CumSumData;
+RWStructuredBuffer<float> CumSumResult;
+RWStructuredBuffer<int> dimShape;
+RWStructuredBuffer<int> dimStride;
+
+[numthreads(4,1,1)]
+void CumSum (uint3 id : SV_DispatchThreadID) {
+	float cumsum = 0;
+	for (int i = 0; i < dimShape; i++){
+		cumsum += CumSumData[id.x * dimStride];
+		CumSumResult[id.x * dimStride[dim]] = cumsum;
+	}
+}
+
+#pragma kernel CumSum_
+RWStructuredBuffer<float> CumSumData_;
+RWStructuredBuffer<int> dimShape;
+RWStructuredBuffer<int> dimStride;
+
+[numthreads(4,1,1)]
+void CumSum_ (uint3 id : SV_DispatchThreadID) {
+	float cumsum = 0;
+	for (int i = 0; i < dimShape; i++){
+		cumsum += CumSumData_[id.x * dimStride];
+		CumSumData_[id.x * dimStride[dim]] = cumsum;
+	}
+}
+
 #pragma kernel Diagonal
 
 RWStructuredBuffer<int> DiagonalNumcolumns;
