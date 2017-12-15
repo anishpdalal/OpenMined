@@ -257,9 +257,9 @@ namespace OpenMined.Syft.Tensor
 			
 			if (dataOnGpu) 
 			{
-				if (!inline) return CumSumGPU ();
-				CumSumGPU_();
-				return this;
+//				if (!inline) return CumSumGPU ();
+//				CumSumGPU_();
+//				return this;
 			}
 			var result = inline ? this : this.Copy();
 			float cumsum = 0;

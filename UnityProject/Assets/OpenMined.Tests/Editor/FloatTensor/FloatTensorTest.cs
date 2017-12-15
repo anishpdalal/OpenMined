@@ -563,7 +563,41 @@ namespace OpenMined.Tests.Editor.FloatTensor
                 Assert.AreEqual(expectedCoshTensor[i], tensor1[i]);
             }
         }
-	
+
+		[Test]
+		public void CumSum()
+		{
+			float[] data = {1f, 2f, 3f, 4f, 5f};
+			int[] shape1 = {5, 1};
+			int dim = 0;
+			var tensor = new Syft.Tensor.FloatTensor(_controller: ctrl, _data: data, _shape: shape1);
+			float[] expectedData = {1f, 3f, 6f, 10f, 15f};
+			var expectedTensor = new Syft.Tensor.FloatTensor(_controller: ctrl, _data: expectedData, _shape: shape1);
+			var actualTensor = tensor.CumSum(dim);
+
+			for (int i = 0; i < actualTensor.Size; i++)
+			{
+				Assert.AreEqual(expectedTensor[i], actualTensor[i]);
+			}
+		}
+
+		[Test]
+		public void CumSum_()
+		{
+			float[] data = {1f, 2f, 3f, 4f, 5f};
+			int[] shape1 = {5, 1};
+			int dim = 0;
+			var tensor = new Syft.Tensor.FloatTensor(_controller: ctrl, _data: data, _shape: shape1);
+			float[] expectedData = {1f, 3f, 6f, 10f, 15f};
+			var expectedTensor = new Syft.Tensor.FloatTensor(_controller: ctrl, _data: expectedData, _shape: shape1);
+			tensor.CumSum(dim, inline: true);
+
+			for (int i = 0; i < tensor.Size; i++)
+			{
+				Assert.AreEqual(expectedTensor[i], tensor[i]);
+			}
+		}
+
         [Test]
         public void Create1DTensor()
         {
