@@ -341,10 +341,10 @@ namespace OpenMined.Syft.Tensor
 			var result = this.Copy();
 			shader.SetBuffer(CumSumKernel, "CumSumData", dataBuffer);
 			shader.SetBuffer(CumSumKernel, "CumSumResult", result.DataBuffer);
-			var dimShape = SendIntToGpu(CumSumKernel, this.Shape[dim], "dimShape");
+			var cumSum = SendFloatToGpu(CumSumKernel, 0, "cumSum");
 			var dimStride = SendIntToGpu(CumSumKernel, this.Strides[dim], "dimStride");
 			shader.Dispatch(CumSumKernel, this.Shape[dim], 1, 1);
-			dimShape.Release();
+			cumSum.Release();
 			dimStride.Release();
 			return result;
 		}
@@ -352,10 +352,10 @@ namespace OpenMined.Syft.Tensor
 		public void CumSumGPU_(int dim)
 		{
 			shader.SetBuffer(CumSumKernel_, "CumSumData_", dataBuffer);
-			var dimShape = SendIntToGpu(CumSumKernel_, this.Shape[dim], "dimShape");
+			var cumSum = SendFloatToGpu(CumSumKernel_, this.Shape[dim], "cumSum");
 			var dimStride = SendIntToGpu(CumSumKernel_, this.Strides[dim], "dimStride");
 			shader.Dispatch(CumSumKernel_, this.Shape[dim], 1, 1);
-			dimShape.Release();
+			cumSum.Release();
 			dimStride.Release();
 		}
 
